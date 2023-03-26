@@ -1,0 +1,16 @@
+---
+- name: Linux hardening
+  hosts: rhel
+  gather_facts: yes
+
+  tasks:
+    - name: Ensure firewall package is installed
+      ansible.builtin.dnf:
+        name: firewalld
+        state: present
+
+    - name: Ensure firewall service is up and running
+      ansible.builtin.service:
+        name: firewalld
+        state: started
+        enabled: yes
