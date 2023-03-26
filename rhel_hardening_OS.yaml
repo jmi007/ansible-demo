@@ -1,6 +1,6 @@
 ---
 - name: Harden linux systems
-  hosts: "{{ _hosts | default('web') }}"
+  hosts: rhel
   become: true
   vars:
     harden_firewall: false
