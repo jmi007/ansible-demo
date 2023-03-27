@@ -1,6 +1,6 @@
 ---
 - name: Checking Python Solaris
-  hosts: solaris
+  hosts: freebsd
   gather_facts: false
   tasks:
     - command: which python
