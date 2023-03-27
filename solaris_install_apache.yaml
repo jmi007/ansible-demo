@@ -1,6 +1,5 @@
 ---
-- name: Install Solaris
-  hosts: freebsd
+- hosts: freebsd
   become: yes
   gather_facts: yes
   
