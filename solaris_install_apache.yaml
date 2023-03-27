@@ -3,7 +3,12 @@
   become: yes
   gather_facts: yes
   
-- name: Install Vim
-  community.general.pkg5:
-    name: editor/vim
+- name: Create and install a zone, but don't boot it
+  community.general.solaris_zone:
+    name: zone1
+    state: present
+    path: /zones/zone1
+    sparse: true
+    root_password: Abc@1234
+    config: 'set autoboot=true; add net; set physical=bge0; set address=192.168.100.227; end'
 
