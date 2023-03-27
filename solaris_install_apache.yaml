@@ -1,14 +1,12 @@
 ---
-- hosts: freebsd
-  become: yes
-  gather_facts: yes
-  
-- name: Create and install a zone, but don't boot it
-  community.general.solaris_zone:
-    name: zone1
-    state: present
-    path: /zones/zone1
-    sparse: true
-    root_password: Abc@1234
-    config: 'set autoboot=true; add net; set physical=bge0; set address=192.168.100.227; end'
+- name: Fetch packages for the solaris publisher direct from Oracle
+  community.general.pkg5_publisher:
+    name: solaris
+    sticky: true
+    origin: https://pkg.oracle.com/solaris/support/
+
+- name: Configure a publisher for locally-produced packages
+  community.general.pkg5_publisher:
+    name: site
+    origin: 'https://pkg.example.com/site/'
 
