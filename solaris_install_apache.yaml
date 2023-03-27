@@ -1,17 +1,20 @@
 ---
-- name: install and start Apache
-  hosts: solaris
-  vars_files:
-    - "vars/{{ ansible_os_family }}.yml"
-   
-  tasks:
-    - name: install Apache on Solaris
-      pkg5: name=web/server/apache-24
-      when: ansible_os_family == "Solaris"
- 
-    - name: install Apache on RHEL
-      yum:  name=httpd
-      when: ansible_os_family == "RedHat"
- 
-    - name: start Apache
-      service: name={{ apache }} state=started
+- name: Install Vim
+  community.general.pkg5:
+    name: editor/vim
+
+- name: Install Vim without refreshing publishers
+  community.general.pkg5:
+    name: editor/vim
+    refresh: false
+
+- name: Remove finger daemon
+  community.general.pkg5:
+    name: service/network/finger
+    state: absent
+
+- name: Install several packages at once
+  community.general.pkg5:
+    name:
+    - /file/gnu-findutils
+    - /text/gnu-grep
