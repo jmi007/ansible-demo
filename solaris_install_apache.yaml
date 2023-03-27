@@ -1,4 +1,9 @@
 ---
+- name: Install Solaris
+  hosts: freebsd
+  become: yes
+  gather_facts: yes
+  
 - name: Install Vim
   community.general.pkg5:
     name: editor/vim
