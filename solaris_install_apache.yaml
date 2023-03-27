@@ -1,12 +1,10 @@
 ---
-# Fetch packages for the solaris publisher direct from Oracle:
-- pkg5_publisher:
-    name: solaris
-    sticky: true
-    origin: https://pkg.oracle.com/solaris/support/
+- name: Install Vim
+  community.general.pkg5:
+    name: editor/vim
 
-# Configure a publisher for locally-produced packages:
-- pkg5_publisher:
-    name: site
-    origin: 'https://pkg.example.com/site/'
+- name: Install Vim without refreshing publishers
+  community.general.pkg5:
+    name: editor/vim
+    refresh: false
 
