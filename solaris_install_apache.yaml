@@ -3,8 +3,7 @@
   hosts: solaris
   vars_files:
     - "vars/{{ ansible_os_family }}.yml"
-  sudo: yes
- 
+   
   tasks:
     - name: install Apache on Solaris
       pkg5: name=web/server/apache-24
