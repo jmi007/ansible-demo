@@ -1,0 +1,60 @@
+---
+- hosts: solaris
+  become: yes
+  
+  tasks:
+  - name: Set root password policy
+    solaris_user:
+      name: root
+      password_max_age: 90
+      password_warning_days: 14
+      state: present
+
+  - name: Disable rlogin and rsh services
+    solaris_svc:
+      name: "network/login:rlogin"
+      state: disabled
+    solaris_svc:
+      name: "network/shell:rsh"
+      state: disabled
+
+  - name: Configure audit settings
+    solaris_audit:
+      classes:
+        - user
+        - group
+        - process
+      flags:
+        - ex
+        - ad
+        - lo
+      state: enabled
+
+  - name: Disable unneeded services
+    solaris_svc:
+      name: "network/nfs/nlockmgr"
+      state: disabled
+    solaris_svc:
+      name: "network/nfs/status"
+      state: disabled
+    solaris_svc:
+      name: "network/finger"
+      state: disabled
+
+  - name: Configure SSH settings
+    solaris_ssh:
+      config:
+        Protocol: 2
+        PermitRootLogin: no
+        PermitEmptyPasswords: no
+        X11Forwarding: no
+        UseDNS: no
+      state: present
+
+  - name: Set default umask for users
+    solaris_profile:
+      profile: /etc/profile
+      profile_type: system
+      data:
+        - 'umask 027'
+      state: present
