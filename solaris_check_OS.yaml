@@ -1,11 +1,9 @@
 ---
-- name: Fetch packages for the solaris publisher direct from Oracle
-  community.general.pkg5_publisher:
-    name: solaris
-    sticky: true
-    origin: https://pkg.oracle.com/solaris/support/
-
-- name: Configure a publisher for locally-produced packages
-  community.general.pkg5_publisher:
-    name: site
-    origin: 'https://pkg.example.com/site/'
+---
+- name: Service demo
+  hosts: solaris
+  tasks:
+    - name: Service svc:/system/filesystem/autofs:default is in enabled state
+      service:
+        name: svc:/system/filesystem/autofs:default
+        state: started
