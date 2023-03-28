@@ -1,0 +1,8 @@
+---
+- name: Service demo
+  hosts: solaris
+  tasks:
+    - name: Service svc:/system/filesystem/autofs:default is in enabled state
+      service:
+        name: svc:/system/filesystem/autofs:default
+        state: started
