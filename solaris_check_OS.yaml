@@ -1,5 +1,4 @@
 ---
----
 - name: Service demo
   hosts: solaris
   tasks:
