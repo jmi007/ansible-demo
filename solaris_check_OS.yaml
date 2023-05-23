@@ -1,9 +1,12 @@
 ---
-- name: Install Vim
-  community.general.pkg5:
-    name: editor/vim
+- name: Service demo
+  hosts: solaris
+  tasks:
+    - name: Install Vim
+      community.general.pkg5:
+        name: editor/vim
 
-- name: Install Vim without refreshing publishers
-  community.general.pkg5:
-    name: editor/vim
-    refresh: false
+    - name: Install Vim without refreshing publishers
+      community.general.pkg5:
+        name: editor/vim
+        refresh: false
