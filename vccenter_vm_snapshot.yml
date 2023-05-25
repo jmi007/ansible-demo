@@ -1,12 +1,19 @@
-- name: Create a snapshot
-  community.vmware.vmware_guest_snapshot:
-    hostname: "{{ vcenter_hostname }}"
-    username: "{{ vcenter_username }}"
-    password: "{{ vcenter_password }}"
-    datacenter: "{{ datacenter_name }}"
-    folder: "/{{ datacenter_name }}/vm/"
-    name: "{{ guest_name }}"
-    state: present
-    snapshot_name: snap1
-    description: snap1_description
-  delegate_to: localhost
+---
+- name: Create snapshot from vCenter
+  hosts: ubuntu
+  become: yes
+  gather_facts: yes
+  
+  tasks:
+    - name: Create a snapshot
+      community.vmware.vmware_guest_snapshot:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        datacenter: "{{ datacenter_name }}"
+        folder: "/{{ datacenter_name }}/vm/"
+        name: "{{ guest_name }}"
+        state: present
+        snapshot_name: ubuntu_snap1
+        description: ubuntu_snap1_description
+      delegate_to: ubuntu
