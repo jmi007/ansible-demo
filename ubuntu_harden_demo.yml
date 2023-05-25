@@ -1,0 +1,46 @@
+---
+- name: Harden Linux OS
+  hosts: ubuntu
+  become: true
+  gather_facts: false
+
+  tasks:
+    - name: Ensure permissions on /etc/motd are configured
+      ansible.builtin.file:
+        path: /etc/motd
+        owner: root
+        group: root
+        mode: '0644'      
+
+    - name: Ensure permissions on /etc/issue are configured
+      ansible.builtin.file:
+        path: /etc/issue
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Ensure permissions on /etc/issue.net are configured
+      ansible.builtin.file:
+        path: /etc/issue.net
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Ensure SSH Idle Timeout Interval is configured - ClientAliveInterval
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^\#ClientAliveInterval'
+        line: 'ClientAliveInterval 900'
+
+
+    - name: Ensure SSH Idle Timeout Interval is configured - ClientAliveCountMax
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^\#ClientAliveCountMax'
+        line: 'ClientAliveCountMax 0'
+
+    - name: Ensure SSH warning banner is configured
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^\#Banner'
+        line: 'Banner /etc/issue.net'
