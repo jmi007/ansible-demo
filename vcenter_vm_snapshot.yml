@@ -1,5 +1,4 @@
 ---
----
 - name: Snapshot VM Ubunttu
   hosts: ubuntu
 
