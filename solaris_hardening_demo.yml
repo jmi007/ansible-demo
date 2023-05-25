@@ -1,0 +1,38 @@
+---
+- name: Harden Solaris
+  hosts: solaris
+  become: true
+  gather_facts: false
+  vars:
+    passlength: 12
+    namecheck: YES
+    history: 10
+    mindiff: 3
+    minupper: 1
+    minlower: 1
+    minspecial: 1
+    mindigit: 1
+    maxrepeats: 1
+    whitespace: YES
+    dictiondbdir: /var/passwd
+    dictionlist: /usr/share/lib/dict/words
+
+  tasks:
+    - name: Ensure "LOCK_AFTER_RETRIES" set to YES
+      ansible.builtin.lineinfile:
+        path: /etc/security/policy.conf
+        regexp: '^\#LOCK_AFTER_RETRIES=NO'
+        line: 'LOCK_AFTER_RETRIES=YES'
+        backup: yes
+
+    - name: Restart Service
+      ansible.builtin.command: sudo svcadm restart svc:/system/name-service/cache
+
+    - name: Set Strong Password Creation Policies
+      ansible.builtin.template:
+        src: templates/passwd.j2
+        dest: /etc/default/passwd.j2
+        owner: root
+        group: root
+        mode: '0644'
+        backup: yes
