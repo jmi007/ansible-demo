@@ -1,6 +1,6 @@
 ---
 - name: Snapshot VMs from vCenter
-  hosts:
+  hosts: localhost
 
   tasks:
     - name: Create a snapshot
