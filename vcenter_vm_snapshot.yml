@@ -1,6 +1,6 @@
 ---
-- name: Snapshot VM Ubunttu
-  hosts: ubuntu
+- name: Snapshot VMs from vCenter
+  hosts:
 
   tasks:
     - name: Create a snapshot
