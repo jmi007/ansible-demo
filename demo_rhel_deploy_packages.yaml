@@ -1,0 +1,22 @@
+---
+- name: Deploy monitoring
+  hosts: rhel
+  become: true
+
+  # module_defaults:
+  #   ansible.posix.firewalld:
+  #     permanent: true
+
+  tasks:
+    - name: Print Software Version
+      command: cat /etc/redhat-release
+
+    # - name: Include redhat.rhel_system_roles.cocpit
+
+    # - name: Copy files/cockpit.conf to /etc/cockpit/
+
+    # - name: Restart cockpit service
+
+    # - name: Allow cockpit through firewall 
+
+      
