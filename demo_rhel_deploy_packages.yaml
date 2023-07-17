@@ -8,15 +8,36 @@
   #     permanent: true
 
   tasks:
-    - name: Print Software Version
-      command: cat /etc/redhat-release
-
+   
     # - name: Include redhat.rhel_system_roles.cocpit
-
+  
     # - name: Copy files/cockpit.conf to /etc/cockpit/
+     
+    # name: Restart cockpit service
 
-    # - name: Restart cockpit service
+    # name: Allow cockpit through firewall
 
-    # - name: Allow cockpit through firewall 
+    - name: cấu hình firewalld cho kết nối httpd
+      ansible.posix.firewalld:
+        port: 80/tcp
+        zone: public
+        permanent: true
+        state: enabled
+        immediate: true
+    - name: cài đặt httpd
+    
+    - name: thay đổi thông tin SElinux enforcing
+      ansible.posix.selinux:
+        policy: targeted
+        state: enforcing
+
+
+
+
+ 
+
+
+   
+
 
       
