@@ -1,3 +1,4 @@
+---
 - name: Linux hardening
   hosts: rhel
   gather_facts: yes

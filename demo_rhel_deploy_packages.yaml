@@ -17,19 +17,19 @@
 
     # name: Allow cockpit through firewall
 
-    - name: cấu hình firewalld cho kết nối httpd
-      ansible.posix.firewalld:
-        port: 80/tcp
-        zone: public
-        permanent: true
-        state: enabled
-        immediate: true
-    - name: cài đặt httpd
-    
-    - name: thay đổi thông tin SElinux enforcing
-      ansible.posix.selinux:
-        policy: targeted
-        state: enforcing
+    # - name: cấu hình firewalld cho kết nối httpd
+
+    # - name: cài đặt httpd
+  
+    # - name: thay đổi thông tin SElinux enforcing
+     
+    - name: cài đặt web server
+      ansible.builtin.service:
+        name: httpd
+        state: started
+        enabled: true
+
+
 
 
 
