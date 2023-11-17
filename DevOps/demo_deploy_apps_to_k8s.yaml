@@ -1,12 +1,9 @@
 ---
 - hosts: localhost
-  
+
   collections:
   - kubernetes.core
-
   tasks:
-
-
   - name: Get a list of all pods from any namespace
     kubernetes.core.k8s_info:
       host: https://api.ocp4.systex4.local:6443
