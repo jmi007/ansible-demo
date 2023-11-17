@@ -1,14 +1,12 @@
 ---
 - name: back up config and look at device health indicators on ios devices
   hosts: ios
-
   tasks:
-
   - name: backup the device configuration
     cisco.ios.ios_config:
       backup: true
-  
- #   ios_config:
+
+#   ios_config:
 #    backup: yes
 
   - name: look at device health indicators
@@ -26,3 +24,10 @@
     debug:
       msg: "{{ item }}"
     loop: "{{ results.stdout_lines }}"
+
+#  - name: thêm vlan 10 vào thiết bị
+
+  
+#  - name: tạo acl 10 cấm các client 10.10.10.0/24
+
+  
