@@ -1,0 +1,28 @@
+---
+- name: back up config and look at device health indicators on ios devices
+  hosts: ios
+
+  tasks:
+
+  - name: backup the device configuration
+    cisco.ios.ios_config:
+      backup: true
+  
+ #   ios_config:
+#    backup: yes
+
+  - name: look at device health indicators
+    ios_command:
+      commands:
+      # this provides hostname and uptime
+      - sh ver | include uptime
+      - sh ip domain
+      - sh clock
+      - sh ip name-server
+      - sh proc mem | include Total
+    register: results
+
+  - name: show results
+    debug:
+      msg: "{{ item }}"
+    loop: "{{ results.stdout_lines }}"

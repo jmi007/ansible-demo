@@ -1,0 +1,53 @@
+---
+- name: Deploy monitoring
+  hosts: rhel
+  become: true
+
+  # module_defaults:
+  #   ansible.posix.firewalld:
+  #     permanent: true
+
+  tasks:
+   
+    # - name: Include redhat.rhel_system_roles.cocpit
+  
+    # - name: Copy files/cockpit.conf to /etc/cockpit/
+    
+         
+    # - name: Restart cockpit service
+
+    # name: Allow cockpit through firewall
+
+    - name: install httpd
+  
+    - name: change SElinux enforcing
+      ansible.posix.selinux:
+        policy: targeted
+        state: enforcing
+      register: selinux
+     
+    - name: cài đặt web server
+      ansible.builtin.package:
+        name: httpd
+        state: latest
+    
+    - name: Install postgresql-server
+      ansible.builtin.package:
+        name: postgresql-server
+        state: latest
+    
+    
+
+
+
+
+
+
+
+ 
+
+
+   
+
+
+      
