@@ -2,9 +2,11 @@
 - name: back up config and look at device health indicators on ios devices
   hosts: ios
   tasks:
+
   - name: backup the device configuration
     cisco.ios.ios_config:
       backup: true
+  
   
 
 #   ios_config:
@@ -26,9 +28,22 @@
       msg: "{{ item }}"
     loop: "{{ results.stdout_lines }}"
 
-#  - name: thêm vlan 10 vào thiết bị
+  - name: thêm vlan 10 
+  
 
   
-#  - name: tạo acl 10 cấm các client 10.10.10.0/24
+  - name: tạo acl 10 
+    cisco.ios.ios_config:
+      lines:
+        - 10 permit ip host 1.1.1.1 any log
+        - 20 permit ip host 2.2.2.56 any log
+        - 30 permit ip host 3.3.3.84 any log
+        - 40 permit ip host 4.4.4.112 any log
+        - 50 permit ip host 5.5.5.140 any log
+      parents: ip access-list extended test
+      before: no ip access-list extended test
+      match: exact
+  
+  
 
   

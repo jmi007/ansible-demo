@@ -9,7 +9,27 @@
 
   tasks:
    
-    # - name: Include redhat.rhel_system_roles.cocpit
+    - name: Include redhat.rhel_system_roles.cocpit
+      ansible.builtin.include_role:
+        name: redhat.rhel_system_roles.cocpit
+      vars:
+        cocpit_profiles:
+          - name: ovirt-engine-dns
+            dns: ovirt-engine
+            profile: systemd
+            command: monitor
+            interval: '300'
+            retry: '3'
+            timeout: '300'
+          - name: ovirt-fetch-logs
+            fetch_logs: true
+            log_dir: /var/log/ovirt-engine-dns
+            profile: systemd
+            command: monitor
+            interval: '300'
+            retry: '3'
+            timeout: '300'
+    
   
     # - name: Copy files/cockpit.conf to /etc/cockpit/
     
@@ -35,6 +55,9 @@
       ansible.builtin.package:
         name: postgresql-server
         state: latest
+    
+    
+     
     
     
 
