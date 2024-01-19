@@ -1,0 +1,14 @@
+---
+- hosts: node1.example.com
+  become: yes
+  vars:
+    check_only: yes
+  tasks:
+  - name: check for updates
+    yum:
+      name: '*'
+      state: latest
+      exclude: kernel*
+    check_mode: "{{ check_only }}"
+    throttle: 1
+    register: updates
