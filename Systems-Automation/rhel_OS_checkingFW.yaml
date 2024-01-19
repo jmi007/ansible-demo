@@ -1,6 +1,6 @@
 ---
 - name: Linux hardening
-  hosts: rhel
+  hosts: rhel7
   gather_facts: yes
 
   tasks:
