@@ -5,7 +5,7 @@
 
   tasks:
     - name: Ensure firewall package is installed
-      ansible.builtin.dnf:
+      ansible.builtin.yum:
         name: firewalld
         state: present
 
