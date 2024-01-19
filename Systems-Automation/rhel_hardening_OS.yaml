@@ -1,6 +1,6 @@
 ---
 - name: Harden linux systems
-  hosts: rhel
+  hosts: node2.example.com
   become: true
   vars:
     harden_firewall: false
