@@ -1,6 +1,7 @@
 ---
 - name: Linux hardening
   hosts: node2.example.com
+  become: true
   gather_facts: yes
 
   tasks:
