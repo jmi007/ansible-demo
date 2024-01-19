@@ -1,5 +1,5 @@
 ---
-- hosts: node1.example.com
+- hosts: node2.example.com
   become: yes
   vars:
     check_only: yes
