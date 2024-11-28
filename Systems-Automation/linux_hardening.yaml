@@ -15,15 +15,15 @@
         state: started
         enabled: yes
 
-    - name: Block non-required services
-      ansible.posix.firewalld:
-        service: "{{ item }}"
-        state: disabled
-        permanent: yes
-        immediate: yes
-      loop:
-        - cockpit
-        - dhcpv6-client
+#    - name: Block non-required services
+#      ansible.posix.firewalld:
+#        service: "{{ item }}"
+#        state: disabled
+#        permanent: yes
+#        immediate: yes
+#      loop:
+#        - cockpit
+#       - dhcpv6-client
 
     - name: Enable required services
       ansible.posix.firewalld:
