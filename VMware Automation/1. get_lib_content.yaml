@@ -7,9 +7,9 @@
   - vars/vars.yaml 
   
   vars:
-    vcenter_hostname: 'vcenter.vnlabs.dev'
-    vcenter_username: 'thanhnq@vnlabs.dev'
-    vcenter_password: 'T3stP@ssw0rd'
+    vcenter_hostname: 'yyy'
+    vcenter_username: 'xxx'
+    vcenter_password: 'xxx'
     
   tasks:
    
