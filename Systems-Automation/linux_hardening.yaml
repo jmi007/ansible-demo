@@ -25,12 +25,12 @@
 #        - cockpit
 #       - dhcpv6-client
 
-    - name: Enable required services
-      ansible.posix.firewalld:
-        service: "ssh"
-        state: enabled
-        permanent: yes
-        immediate: yes
+#    - name: Enable required services
+#      ansible.posix.firewalld:
+#        service: "ssh"
+#        state: enabled
+#        permanent: yes
+#        immediate: yes
 
     - name: Ensure SELinux is enabled and enforcing
       ansible.posix.selinux:
