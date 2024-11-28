@@ -1,0 +1,134 @@
+---
+- name: Gan thong tin ve IP cho VM
+  hosts: localhost
+  gather_facts: false
+
+  vars_files: 
+  - vars/vars.yaml 
+
+  vars:
+    vmware:
+      host: '{{ lookup("env", "VMWARE_HOST") }}'
+      username: '{{ lookup("env", "VMWARE_USER") }}'
+      password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
+
+  tasks:
+
+    - name: 1. HTTP-API - Authenticate to vSphere
+      register: auth_response
+      uri:
+        url: "https://{{ vmware.host}}/rest/com/vmware/cis/session"
+        method: POST
+        validate_certs: false
+        headers:
+          Content-Type: "application/json"
+        user: "{{ vmware.username }}"
+        password: "{{ vmware.password }}"          
+        return_content: yes
+
+    - name: 2. HTTP-API Delete existing customization specs - {{ customization_spec_name }}
+      uri:
+        url: "https://{{ vmware.host }}/api/vcenter/guest/customization-specs/{{ customization_spec_name }}"        
+        method: DELETE
+        validate_certs: false
+        status_code: [204, 404]
+        headers:          
+          vmware-api-session-id: "{{ auth_response.json['value'] }}"        
+
+    - name: 3. HTTP-API Create customization specs
+      uri:
+        url: "https://{{ vmware.host }}/api/vcenter/guest/customization-specs"        
+        method: POST
+        validate_certs: false
+        return_content: yes
+        headers:          
+          vmware-api-session-id: "{{ auth_response.json['value'] }}"
+        body_format: json
+        status_code: 201
+        body: |-
+          {
+            "description":"vnlabs - customization spec",
+            "name":"{{ customization_spec_name }}",
+            "spec":{
+                "configuration_spec":{
+                  "linux_config":{
+                      "domain":"{{ domain_name }}",
+                      "hostname":{
+                        "fixed_name":"{{ host_name }}",
+                        "type":"FIXED"
+                      }
+                  }
+                },
+                "interfaces":[
+                  {
+                      "adapter":{
+                        "ipv4":{
+                            "type":"STATIC",
+                            "gateways":[
+                              "{{ gate_way }}"
+                            ],
+                            "ip_address":"{{ ip_address }}",
+                            "prefix":"{{ prefix }}"
+                        }
+                      }
+                  }
+                ],
+                "global_DNS_settings":{
+                  "dns_suffix_list":[
+                      "{{ domain_name }}"
+                  ],
+                  "dns_servers":[
+                      "{{ dns_server_1 }}"
+                  ]
+                }
+            }
+          }
+        
+
+   
+    # - name: 5. Gan cac thong so IP can thiet cho VM
+    #   vmware.vmware_rest.vcenter_vm_guest_customization:
+    #     vm: "{{ new_vm }}" # "{{ lookup('vmware.vmware_rest.vm_moid', '/RHLabs/vm/test_vm1') }}"
+    #     vcenter_validate_certs: false
+    #     configuration_spec:
+    #       linux_config:
+    #         domain: "{{ domain_name }}"
+    #         hostname:
+    #           fixed_name: "{{ host_name }}"
+    #           type: FIXED
+    #     interfaces:
+    #     - adapter:
+    #         ipv4:
+    #           type: STATIC
+    #           gateways:
+    #           - "{{ gate_way }}"
+    #           ip_address: "{{ ip_address }}"
+    #           prefix: "{{ prefix }}"
+    #     global_DNS_settings:
+    #       dns_suffix_list: []
+    #       dns_servers:
+    #       - "{{ dns_server_1 }}"
+
+    # - name: Get virtual machine ID
+    #   register: vm_response
+    #   uri:
+    #     url: "https://{{ vmware.host }}/rest/vcenter/vm"
+    #     method: GET
+    #     headers:
+    #       Content-Type: "application/json"
+    #       vmware-api-session-id: "{{ auth_response.json['value'] }}"
+    #     return_content: yes
+      
+   
+    # - name: 2. Get virtual machine ID and vNIC ID
+    #   uri:
+    #     url: "https://{{ vmware.host }}/rest/vcenter/vm/{{ new_vm }}/hardware/ethernet"
+    #     method: GET
+    #     validate_certs: false
+    #     headers:
+    #       Content-Type: "application/json"
+    #       vmware-api-session-id: "{{ auth_response.json['value'] }}"
+    #     return_content: yes
+    #   register: vnic_response
+
+    

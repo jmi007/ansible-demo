@@ -1,0 +1,54 @@
+---
+- name: This playbook is an example of getting VMware information
+  hosts: localhost
+  gather_facts: false
+
+  vars:
+    vm_datacenter: "{{ vm_datacenter | default('RHDC') }}"
+    vm_folder: "{{ vm_folder | default('Automation') }}"
+    api_host: "{{ api_host }}"  
+
+  tasks:
+
+  - name: Lay thong tin cac VM trong folder 
+    community.vmware.vmware_vm_info:
+      folder: "/{{vm_datacenter}}/vm/{{vm_folder}}/"
+      hostname: "{{ api_host }}"
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: no
+    delegate_to: localhost
+    register: vm_info
+
+  - name: Lay thong tin ve cac template trong vsphere
+    community.vmware.vmware_vm_info:
+      vm_type: template
+      hostname: "{{ api_host }}"
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: no
+    delegate_to: localhost
+    register: template_info
+
+  - name: Get a vmware api session id for getting a status state
+    uri:
+        url: "https://{{ api_host }}/rest/com/vmware/cis/session"       
+        user: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        force_basic_auth: true
+        method: POST
+        headers:
+          Content-Type: application/json
+    register: get_vmware_api_session_id_result
+    no_log: true
+
+  - name: Pass session id vao workflow
+    set_stats:
+      data:
+        vmware_api_session_id: "{{ get_vmware_api_session_id_result.json.value }}"
+
+  - name: "Lay thong tin cua cac template de dung cho Workflows"
+    set_stats:
+      data:
+        template_info:  "{{ template_info }}"  

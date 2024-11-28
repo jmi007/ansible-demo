@@ -1,0 +1,33 @@
+---
+- name: revert snapshots for OCP nodes 
+  hosts: vcenter
+  gather_facts: no
+  
+  vars:
+    datacenter: "RHDC"
+    folder: "/RHDC/vm/OCP/"
+    snapshot_name: "no-OS"
+
+  tasks:
+  - name: Lay thong tin cac VM trong folder 
+    community.vmware.vmware_vm_info:
+      folder: "/RHDC/vm/OCP/"
+    delegate_to: localhost
+    register: vm_info
+
+  - name: list OCP VMs to ve reverted
+    debug:
+      msg: 
+        guest_name:  "{{item.guest_name}}"
+    loop: "{{ vm_info.virtual_machines }}"
+
+  - name: revert OCP VMs to latest snapshots
+    community.vmware.vmware_guest_snapshot:
+      datacenter: "{{ datacenter }}"     
+      folder: "{{ folder }}"
+      name: "{{ item.guest_name }}"
+      state: revert
+      snapshot_name: "{{ snapshot_name }}"
+    loop: "{{vm_info.virtual_machines}}"
+    delegate_to: localhost
+

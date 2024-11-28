@@ -1,0 +1,36 @@
+---
+- name: This playbook is an example Windows Automation
+  hosts: windows
+  gather_facts: false
+
+  tasks:
+
+    - name: Create local group to contain new users
+      win_group:
+        name: NewDemoGroup
+        description: Allow access to C:\Development folder
+
+    - name: Create Development folder
+      win_file:
+        path: C:\Development
+        state: directory
+
+    - name: Set ACL of Development folder
+      win_acl:
+        path: C:\Development
+        rights: FullControl
+        state: present
+        type: allow
+        user: LocalGroup
+
+    - name: Remove parent inheritance of Development folder
+      win_acl_inheritance:
+        path: C:\Development
+        reorganize: yes
+        state: absent
+
+    - name: Install all security updates with automatic reboots
+      ansible.windows.win_updates:
+        category_names:
+        - SecurityUpdates
+        reboot: yes

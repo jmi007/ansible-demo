@@ -1,0 +1,66 @@
+---
+- name: Lay thong tin cua RHEL-template item trong VMWARE Library 
+  hosts: localhost
+  gather_facts: false
+
+  vars_files: 
+  - vars/vars.yaml 
+  
+  vars:
+    vcenter_hostname: 'vcenter.vnlabs.dev'
+    vcenter_username: 'thanhnq@vnlabs.dev'
+    vcenter_password: 'T3stP@ssw0rd'
+    
+  tasks:
+   
+    - name: 1. Lay danh sach cac local libraries
+      vmware.vmware_rest.content_locallibrary_info:
+      register: lib_list
+      retries: 10
+      delay: 3
+      until: lib_list is not failed
+
+    - name: 2. set content_lib_id variable
+      set_fact:
+        content_lib_id: '{{ (lib_list.value|selectattr("name", "equalto", library_name)|first).id | default("") }}'
+
+    - name: 2. Neu khong tim thay library thi fail playbook
+      fail:
+        msg: "Khong tim thay Content Library: {{ library_name }}"
+      when: content_lib_id == ""
+
+    - name: 3. set_stats lib_id de dung cho cac Job template khac trong Workflow 
+      set_stats:
+        data:
+          lib_id: '{{ content_lib_id }}'
+         
+    - name: 4. Lay danh sach cac item trong library     
+      vmware.vmware_rest.content_library_item_info:
+        library_id: '{{ content_lib_id }}'
+      register: lib_items
+
+    - name: 5 set content_lib_item_id variable
+      set_fact:
+        content_lib_item_id: '{{ (lib_items.value|selectattr("name", "equalto", vm_template_name ) | first).id | default("") }}'
+
+    - name: 6. Neu khong tim thay template thi fail playbook
+      fail:
+        msg: "Khong tim thay template can thiet"
+      when: content_lib_item_id == ""
+
+    - name: 7. set content_lib_item_type variable
+      set_fact:
+        content_lib_item_type: '{{ (lib_items.value|selectattr("name", "equalto", vm_template_name ) | first).type | default("") }}'
+
+    - name: 8. set_stats lib_item_id de dung cho cac Job template khac trong Workflow
+      set_stats:
+        data:
+          lib_item_id: '{{ content_lib_item_id }}'
+
+    - name: 9. set_stats lib_item_type de dung cho cac Job template khac trong Workflow
+      set_stats:
+        data:
+          lib_item_type: '{{ content_lib_item_type }}'      
+          
+    
+   
