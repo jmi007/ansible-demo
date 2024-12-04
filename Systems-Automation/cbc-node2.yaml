@@ -10,6 +10,6 @@
 
   tasks:
     - name: Apply CIS Baseline
-      when: harden_pci | bool
+      when: harden_cis | bool
       ansible.builtin.include_role:
         name: redhatofficial.rhel7_cis
