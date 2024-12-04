@@ -13,5 +13,5 @@
     - name: Apply CIS Baseline
      
       ansible.builtin.include_role:
-        name: redhatofficial.rhel7_cis
+        name: Redhatofficial.rhel7_cis
         
