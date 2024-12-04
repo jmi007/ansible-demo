@@ -6,12 +6,10 @@
     harden_firewall: false
     harden_time: false
     harden_ssh: false
-    harden_pci: false
+    harden_cis: true
 
   tasks:
-
-    # run with --skip-tags accounts_passwords_pam_faillock_deny
-    - name: Apply PCI Baseline
+    - name: Apply CIS Baseline
       when: harden_pci | bool
       ansible.builtin.include_role:
-        name: redhatofficial.rhel7_pci_dss
+        name: redhatofficial.rhel7_cis
