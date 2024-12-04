@@ -1,0 +1,17 @@
+---
+- name: Harden linux systems
+  hosts: node2.example.com
+  become: true
+  vars:
+    harden_firewall: false
+    harden_time: false
+    harden_ssh: false
+    harden_pci: false
+
+  tasks:
+
+    # run with --skip-tags accounts_passwords_pam_faillock_deny
+    - name: Apply PCI Baseline
+      when: harden_pci | bool
+      ansible.builtin.include_role:
+        name: redhatofficial.rhel7_pci_dss
