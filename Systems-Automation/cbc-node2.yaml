@@ -1,15 +1,6 @@
 ---
-- name: Harden linux systems
-  hosts: node2.example.com
-  become: true
-  vars:
-    harden_firewall: false
-    harden_time: false
-    harden_ssh: false
-    harden_cis: true
+- hosts: node2.example.com
+  roles:
+     - { role: RedHatOfficial.rhel7_cis }
 
-  tasks:
-    - name: Apply CIS Baseline
-      when: harden_cis | bool
-      ansible.builtin.include_role:
-        name: RedHatOfficial.rhel7_cis
+        
